@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Slider with Wave Background</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(270deg, #1e3c72, #2a5298, #1e3c72);
+      background-size: 600% 600%;
+      animation: waveBackground 15s ease infinite;
+    }
+
+    @keyframes waveBackground {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 80% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 50px auto;
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      background-color: #000;
+    }
+
+    .img-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: #222;
+    }
+
+    .img-container img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      z-index: 0;
+    }
+
+    .img-container img.active-slide {
+      opacity: 1;
+      transform: translateX(0%);
+      z-index: 1;
+    }
+
+    .slide-number {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: #fff;
+      font-size: 18px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 6px 12px;
+      border-radius: 6px;
+      z-index: 3;
+      font-weight: bold;
+    }
+
+    button.prev, button.next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.4);
+      border: none;
+      padding: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: #fff;
+      z-index: 2;
+      transition: background 0.3s;
+    }
+
+    button.prev:hover, button.next:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .prev {
+      left: 20px;
+    }
+
+    .next {
+      right: 20px;
+    }
+
+    .dots {
+      text-align: center;
+      padding: 15px;
+      background: #fff;
+    }
+
+    .dot {
+      height: 12px;
+      width: 12px;
+      margin: 0 6px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background-color: #333;
+      transform: scale(1.2);
+    }
+
+    .wave {
+      position: relative;
+      width: 100%;
+      height: 100px;
+      overflow: hidden;
+    }
+
+    .wave svg {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    @media (max-width: 768px) {
+      button.prev, button.next {
+        padding: 8px;
+      }
+
+      .slide-number {
+        font-size: 14px;
+        padding: 4px 8px;
+        top: 10px;
+        right: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="img-container">
+      <div class="slide-number" id="slideNumber">1/5</div>
+
+      <img src="Lion.jpg" alt="Lion" />
+      <img src="_101934336_hi001487062.jpg" alt="Image 2">
+      <img src="red_panda_lead.jpg" alt="Image 3">
+      <img src="tiger_laying_hero_background.jpg" alt="Image 4">
+      <img src="3yl7j5q9n4_WEB_288447.jpg" alt="Image 5">
+    </div>
+
+    <button class="prev" onclick="chnageslide(-1)">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <button class="next" onclick="chnageslide(1)">
+      <i class="fa-solid fa-arrow-right"></i>
+    </button>
+
+    <div class="dots" id="dots-container"></div>
+  </div>
+
+  <div class="wave">
+    <svg viewBox="0 0 1440 150" preserveAspectRatio="none">
+      <path fill="#000" fill-opacity="1"
+            d="M0,64L48,85.3C96,107,192,149,288,149.3C384,149,480,107,576,90.7C672,75,768,85,864,90.7C960,96,1056,96,1152,96C1248,96,1344,96,1392,96L1440,96L1440,160L1392,160C1344,160,1248,160,1152,160C1056,160,960,160,864,160C768,160,672,160,576,160C480,160,384,160,288,160C192,160,96,160,48,160L0,160Z">
+      </path>
+    </svg>
+  </div>
+
+  <script>
+    var slideindex = 0;
+    var images = document.querySelectorAll(".img-container img");
+    var dotsContainer = document.getElementById("dots-container");
+    var slideNumber = document.getElementById("slideNumber");
+
+    // Create dots
+    for (var i = 0; i < images.length; i++) {
+      var dot = document.createElement("span");
+      dot.className = "dot";
+      dot.setAttribute("data-index", i);
+      dotsContainer.appendChild(dot);
+    }
+
+    var dots = document.querySelectorAll(".dot");
+
+    // Add click event to dots
+    for (var j = 0; j < dots.length; j++) {
+      dots[j].addEventListener("click", function () {
+        var n = parseInt(this.getAttribute("data-index"));
+        currentSlide(n);
+      });
+    }
+
+    function chnageslide(p) {
+      slideindex += p;
+      showSlide(slideindex);
+    }
+
+    function currentSlide(n) {
+      slideindex = n;
+      showSlide(slideindex);
+    }
+
+    function showSlide(n) {
+      if (n >= images.length) slideindex = 0;
+      if (n < 0) slideindex = images.length - 1;
+
+      for (var i = 0; i < images.length; i++) {
+        images[i].classList.remove("active-slide");
+        dots[i].classList.remove("active");
+      }
+
+      images[slideindex].classList.add("active-slide");
+      dots[slideindex].classList.add("active");
+
+      // Update slide number
+      slideNumber.textContent = (slideindex + 1) + "/" + images.length;
+    }
+
+    // Initial slide
+    showSlide(slideindex);
+
+    // Auto slide
+    setInterval(function () {
+      slideindex++;
+      showSlide(slideindex);
+    }, 4000);
+  </script>
+</body>
+</html>
