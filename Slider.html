@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Slider with Wave Background</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" />
+  <title>Modern Image Slider</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     * {
       box-sizing: border-box;
@@ -13,32 +13,18 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(270deg, #1e3c72, #2a5298, #1e3c72);
-      background-size: 600% 600%;
-      animation: waveBackground 15s ease infinite;
-    }
-
-    @keyframes waveBackground {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 80% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      font-family: 'Poppins', sans-serif;
+      background-color: #264B8C;
+      color: #333;
     }
 
     .container {
       max-width: 1000px;
-      margin: 50px auto;
+      margin: 80px auto;
       position: relative;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-      background-color: #000;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
     }
 
     .img-container {
@@ -56,102 +42,158 @@
       top: 0;
       left: 0;
       opacity: 0;
-      transform: translateX(100%);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: scale(0.9);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 0;
     }
 
     .img-container img.active-slide {
       opacity: 1;
-      transform: translateX(0%);
+      transform: scale(1);
       z-index: 1;
+    }
+
+    .slide-info {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      color: white;
+      z-index: 3;
+      max-width: 60%;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.6s ease 0.3s;
+    }
+
+    .img-container img.active-slide + .slide-info {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .slide-info h2 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .slide-info p {
+      font-size: 1rem;
+      line-height: 1.5;
+      opacity: 0.9;
     }
 
     .slide-number {
       position: absolute;
-      top: 15px;
-      right: 20px;
+      top: 25px;
+      right: 25px;
       color: #fff;
-      font-size: 18px;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 6px 12px;
-      border-radius: 6px;
+      font-size: 16px;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 8px 16px;
+      border-radius: 20px;
       z-index: 3;
-      font-weight: bold;
+      font-weight: 500;
+      backdrop-filter: blur(5px);
     }
 
     button.prev, button.next {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.4);
+      background-color: rgba(255, 255, 255, 0.2);
       border: none;
-      padding: 12px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       cursor: pointer;
       color: #fff;
       z-index: 2;
-      transition: background 0.3s;
+      transition: all 0.3s;
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     button.prev:hover, button.next:hover {
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-50%) scale(1.1);
     }
 
     .prev {
-      left: 20px;
+      left: 25px;
     }
 
     .next {
-      right: 20px;
+      right: 25px;
     }
 
     .dots {
-      text-align: center;
-      padding: 15px;
-      background: #fff;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 3;
+      padding: 10px;
+      border-radius: 20px;
+      background-color: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(5px);
     }
 
     .dot {
-      height: 12px;
-      width: 12px;
-      margin: 0 6px;
-      background-color: #bbb;
+      height: 10px;
+      width: 10px;
+      background-color: rgba(255, 255, 255, 0.5);
       border-radius: 50%;
-      display: inline-block;
-      transition: background-color 0.3s ease, transform 0.3s ease;
+      transition: all 0.3s ease;
       cursor: pointer;
     }
 
     .dot.active {
-      background-color: #333;
-      transform: scale(1.2);
+      background-color: white;
+      transform: scale(1.3);
     }
 
-    .wave {
-      position: relative;
-      width: 100%;
-      height: 100px;
-      overflow: hidden;
-    }
-
-    .wave svg {
+    .progress-bar {
       position: absolute;
       bottom: 0;
-      width: 100%;
-      height: 100%;
+      left: 0;
+      height: 4px;
+      background-color: rgba(255, 255, 255, 0.8);
+      z-index: 3;
+      width: 0%;
+      transition: width 0.1s linear;
     }
 
     @media (max-width: 768px) {
+      .container {
+        margin: 40px auto;
+        border-radius: 0;
+      }
+
+      .slide-info {
+        bottom: 20px;
+        left: 20px;
+        max-width: 80%;
+      }
+
+      .slide-info h2 {
+        font-size: 1.5rem;
+      }
+
       button.prev, button.next {
-        padding: 8px;
+        width: 40px;
+        height: 40px;
       }
 
       .slide-number {
+        top: 15px;
+        right: 15px;
         font-size: 14px;
-        padding: 4px 8px;
-        top: 10px;
-        right: 12px;
       }
     }
   </style>
@@ -160,91 +202,139 @@
 
   <div class="container">
     <div class="img-container">
+      <div class="progress-bar" id="progressBar"></div>
       <div class="slide-number" id="slideNumber">1/5</div>
 
-      <img src="Lion.jpg" alt="Lion" />
+      <img src="Lion.jpg" alt="Lion" class="active-slide">
+      <div class="slide-info">
+        <h2>Majestic Lion</h2>
+        <p>The king of the jungle in its natural habitat.</p>
+      </div>
+      
       <img src="_101934336_hi001487062.jpg" alt="Image 2">
+      <div class="slide-info">
+        <h2>Ocean Waves</h2>
+        <p>The beautiful power of nature's water movements.</p>
+      </div>
+      
       <img src="red_panda_lead.jpg" alt="Image 3">
+      <div class="slide-info">
+        <h2>Red Panda</h2>
+        <p>One of nature's most adorable creatures.</p>
+      </div>
+      
       <img src="tiger_laying_hero_background.jpg" alt="Image 4">
+      <div class="slide-info">
+        <h2>Resting Tiger</h2>
+        <p>The powerful predator in a moment of calm.</p>
+      </div>
+      
       <img src="3yl7j5q9n4_WEB_288447.jpg" alt="Image 5">
+      <div class="slide-info">
+        <h2>Mountain Landscape</h2>
+        <p>Breathtaking views of untouched nature.</p>
+      </div>
     </div>
 
-    <button class="prev" onclick="chnageslide(-1)">
-      <i class="fa-solid fa-arrow-left"></i>
+    <button class="prev" onclick="changeSlide(-1)">
+      <i class="fa-solid fa-chevron-left"></i>
     </button>
-    <button class="next" onclick="chnageslide(1)">
-      <i class="fa-solid fa-arrow-right"></i>
+    <button class="next" onclick="changeSlide(1)">
+      <i class="fa-solid fa-chevron-right"></i>
     </button>
 
     <div class="dots" id="dots-container"></div>
   </div>
 
-  <div class="wave">
-    <svg viewBox="0 0 1440 150" preserveAspectRatio="none">
-      <path fill="#000" fill-opacity="1"
-            d="M0,64L48,85.3C96,107,192,149,288,149.3C384,149,480,107,576,90.7C672,75,768,85,864,90.7C960,96,1056,96,1152,96C1248,96,1344,96,1392,96L1440,96L1440,160L1392,160C1344,160,1248,160,1152,160C1056,160,960,160,864,160C768,160,672,160,576,160C480,160,384,160,288,160C192,160,96,160,48,160L0,160Z">
-      </path>
-    </svg>
-  </div>
-
   <script>
-    var slideindex = 0;
-    var images = document.querySelectorAll(".img-container img");
-    var dotsContainer = document.getElementById("dots-container");
-    var slideNumber = document.getElementById("slideNumber");
+    let slideIndex = 0;
+    let autoSlideInterval;
+    let progressInterval;
+    const images = document.querySelectorAll(".img-container img");
+    const slideInfos = document.querySelectorAll(".slide-info");
+    const dotsContainer = document.getElementById("dots-container");
+    const slideNumber = document.getElementById("slideNumber");
+    const progressBar = document.getElementById("progressBar");
 
     // Create dots
-    for (var i = 0; i < images.length; i++) {
-      var dot = document.createElement("span");
+    images.forEach((_, i) => {
+      const dot = document.createElement("div");
       dot.className = "dot";
       dot.setAttribute("data-index", i);
       dotsContainer.appendChild(dot);
-    }
+    });
 
-    var dots = document.querySelectorAll(".dot");
+    const dots = document.querySelectorAll(".dot");
 
     // Add click event to dots
-    for (var j = 0; j < dots.length; j++) {
-      dots[j].addEventListener("click", function () {
-        var n = parseInt(this.getAttribute("data-index"));
+    dots.forEach(dot => {
+      dot.addEventListener("click", function() {
+        const n = parseInt(this.getAttribute("data-index"));
         currentSlide(n);
       });
-    }
+    });
 
-    function chnageslide(p) {
-      slideindex += p;
-      showSlide(slideindex);
+    function changeSlide(n) {
+      slideIndex += n;
+      showSlide(slideIndex);
+      resetAutoSlide();
     }
 
     function currentSlide(n) {
-      slideindex = n;
-      showSlide(slideindex);
+      slideIndex = n;
+      showSlide(slideIndex);
+      resetAutoSlide();
     }
 
     function showSlide(n) {
-      if (n >= images.length) slideindex = 0;
-      if (n < 0) slideindex = images.length - 1;
+      if (n >= images.length) slideIndex = 0;
+      if (n < 0) slideIndex = images.length - 1;
 
-      for (var i = 0; i < images.length; i++) {
-        images[i].classList.remove("active-slide");
-        dots[i].classList.remove("active");
-      }
+      images.forEach(img => img.classList.remove("active-slide"));
+      slideInfos.forEach(info => info.style.opacity = "0");
+      dots.forEach(dot => dot.classList.remove("active"));
 
-      images[slideindex].classList.add("active-slide");
-      dots[slideindex].classList.add("active");
+      images[slideIndex].classList.add("active-slide");
+      setTimeout(() => {
+        slideInfos[slideIndex].style.opacity = "1";
+      }, 300);
+      dots[slideIndex].classList.add("active");
 
       // Update slide number
-      slideNumber.textContent = (slideindex + 1) + "/" + images.length;
+      slideNumber.textContent = `${slideIndex + 1}/${images.length}`;
+      
+      // Reset progress bar
+      progressBar.style.width = "0%";
+    }
+
+    function resetAutoSlide() {
+      clearInterval(autoSlideInterval);
+      clearInterval(progressInterval);
+      startAutoSlide();
+    }
+
+    function startAutoSlide() {
+      // Progress bar animation
+      let width = 0;
+      progressInterval = setInterval(() => {
+        if (width >= 100) {
+          clearInterval(progressInterval);
+        } else {
+          width += 0.5;
+          progressBar.style.width = `${width}%`;
+        }
+      }, 20);
+
+      // Auto slide
+      autoSlideInterval = setInterval(() => {
+        slideIndex++;
+        showSlide(slideIndex);
+      }, 5000);
     }
 
     // Initial slide
-    showSlide(slideindex);
-
-    // Auto slide
-    setInterval(function () {
-      slideindex++;
-      showSlide(slideindex);
-    }, 4000);
+    showSlide(slideIndex);
+    startAutoSlide();
   </script>
 </body>
 </html>
